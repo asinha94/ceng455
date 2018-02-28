@@ -1,0 +1,11 @@
+19:54:35 **** Incremental Build of configuration Debug for project SW2demo ****
+make all 
+Invoking: Cross ARM GNU Print Size
+arm-none-eabi-size --format=berkeley "SW2demo.elf"
+   text	   data	    bss	    dec	    hex	filename
+  59220	   2288	   3516	  65024	   fe00	SW2demo.elf
+Finished building: SW2demo.siz
+ 
+
+19:54:42 Build Finished (took 6s.157ms)
+
