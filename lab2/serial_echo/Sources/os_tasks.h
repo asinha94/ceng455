@@ -57,13 +57,17 @@ extern "C" {
 #define RX_QUEUE_ID 5
 #define RX_QUEUE_HANDLER_ID 6
 #define TX_SYS_QUEUE_ID 7
-#define READ_QUEUE_ID 8
-#define READ_QUEUE_HANDLER_ID 9
-#define GETLINE_QUEUE_ID 10
+
+#define OPENR_REQ_QUEUE_ID 8
+#define OPENR_RES_QUEUE_ID 9
+#define OPENW_REQ_QUEUE_ID 10
+#define OPENW_RES_QUEUE_ID 11
+#define GETLINE_QUEUE_ID 12
 
 _pool_id RX_MESSAGE_POOL_ID;
 _pool_id TX_SYS_MESSAGE_POOL_ID;
 _pool_id READ_MESSAGE_POOL_ID;
+_pool_id OPENW_MESSAGE_POOL_ID;
 
 typedef struct server_message
 {
@@ -71,13 +75,13 @@ typedef struct server_message
    unsigned char DATA;
 } SERVER_MESSAGE, * SERVER_MESSAGE_PTR;
 
-typedef struct openr_request
+typedef struct open_request
 {
    MESSAGE_HEADER_STRUCT   HEADER;
    _queue_id queue_id;
    _task_id task_id;
    int exists;
-} OPENR_REQUEST, * OPENR_REQUEST_PTR;
+} OPEN_REQUEST, * OPEN_REQUEST_PTR;
 
 typedef struct userTaskRead{
 	_queue_id userQueueId;

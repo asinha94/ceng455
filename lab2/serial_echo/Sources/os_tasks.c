@@ -40,10 +40,6 @@ extern "C" {
 
 USER_TASK_READ readTasks[10];
 
-void newLine() {
-	  char ansi_escape[] =  {0x1B, '[', '2', 'K', '\r'};
-	  UART_DRV_SendData(myUART_IDX, (uint8_t*)ansi_escape, sizeof(ansi_escape));
-}
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 
@@ -124,9 +120,20 @@ void serial_task(os_task_param_t task_init_data)
 	  char c =  msg_ptr->DATA;
 	  _msg_free(msg_ptr);
 
+	  if (c == '\n' || c == '\r') {
+		  printf("\r\nHello");
+		  unsigned char to_send[100];
+		  memcpy(to_send, megaBuffer, current_position);
+		  printf("\r\nSending: %s", to_send);
+		  UART_DRV_SendData(myUART_IDX, "\r\n", sizeof("\r\n"));
+		  current_position = 0;
+		  continue;
+	  }
+
 	  if (c == 0x15) { //erase line
 		  current_position = 0;
-		  newLine();
+		  char ansi_escape[] =  {0x1B, '[', '2', 'K', '\r'};
+		  UART_DRV_SendData(myUART_IDX, (uint8_t*)ansi_escape, sizeof(ansi_escape));
 		  continue;
 	  }
 
@@ -197,14 +204,14 @@ void readrequest_Task(os_task_param_t task_init_data)
 
 
 	// Init openR message queue
-	_queue_id user_read_queue = _msgq_open(READ_QUEUE_ID, 0);
+	_queue_id user_read_queue = _msgq_open(OPENR_RES_QUEUE_ID, 0);
 
 	if (user_read_queue == 0) {
 	 printf("\nCould not open the read message queue\n");
 	 _task_block();
 	}
 
-	READ_MESSAGE_POOL_ID = _msgpool_create(sizeof(OPENR_REQUEST), RX_QUEUE_SIZE, 0, 0);
+	READ_MESSAGE_POOL_ID = _msgpool_create(sizeof(OPEN_REQUEST), RX_QUEUE_SIZE, 0, 0);
 
 	if (READ_MESSAGE_POOL_ID == MSGPOOL_NULL_POOL_ID) {
 	 printf("\nCount not create a read message pool\n");
@@ -223,7 +230,7 @@ void readrequest_Task(os_task_param_t task_init_data)
     }
 
 
-    OPENR_REQUEST_PTR msg_ptr = _msgq_receive(user_read_queue, 0);
+    OPEN_REQUEST_PTR msg_ptr = _msgq_receive(user_read_queue, 0);
     USER_TASK_READ user_task_read;
     user_task_read.taskId = msg_ptr->task_id;
     user_task_read.userQueueId = msg_ptr->queue_id;

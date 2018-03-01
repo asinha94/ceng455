@@ -401,3 +401,16 @@ Command-line arguments:  -os win32 -ws win32 -arch x86 -product com.somniumtech.
 
 !ENTRY ilg.gnuarmeclipse.debug.gdbjtag 4 0 2018-02-28 16:52:00.729
 !MESSAGE Debug session 'serial_echo_Debug_Segger' already started. Terminate the first one before restarting.
+!SESSION 2018-03-01 02:20:24.993 -----------------------------------------------
+eclipse.buildId=3.2.0.201603041649
+java.version=1.7.0_76
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Framework arguments:  -product com.somniumtech.branding.kds.ide -showlocation
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product com.somniumtech.branding.kds.ide -showlocation
+
+!ENTRY org.eclipse.core.resources 2 10035 2018-03-01 02:20:47.396
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.processorexpert.core.ide.wizard.ui 2 0 2018-03-01 02:20:55.758
+!MESSAGE External elements location C:\Freescale\KDS_v3\eclipse\ProcessorExpert\BoardConfigurations/wizard_data does not exist
