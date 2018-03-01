@@ -91,9 +91,29 @@ void serial_task(os_task_param_t task_init_data)
 
 	}
 
+	if (_mutex_init(&permissions_mutex, &mutextattr) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Init Mutex in User task", _task_get_id());
+	}
+
+	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Access Mutex in User task", _task_get_id());
+	}
+
+	for (int i = 0; i < NUM_USER_TASK; i++) {
+
+		user_permissions[i].has_read_permissions = FALSE;
+		user_permissions[i].has_write_permissions = FALSE;
+		user_permissions[i].queue_id = 0;
+		user_permissions[i].task_id = USER_TASK_ID;
+	}
+
+	if (_mutex_unlock(&permissions_mutex) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Unlock Mutex in User task", _task_get_id());
+	}
+
 	getline_q.items_ready = FALSE;
 
-	int size = 1000;
+	int size = 100;
 	char megaBuffer[size];
 	int spacePosition = 0;
 
@@ -197,37 +217,16 @@ void serial_task(os_task_param_t task_init_data)
 **     Returns : Nothing
 ** ===================================================================
 */
+
 void user_task(os_task_param_t task_init_data)
 {
   /* Write your local variable definition here */
 	printf("\r\n[%d] Starting User Task", _task_get_id());
-
-	MUTEX_ATTR_STRUCT mutextattr;
-	_mutatr_init(&mutextattr);
-
-	if (_mutex_init(&permissions_mutex, &mutextattr) != MQX_EOK) {
-		printf("\r\n[%d] Couldn't Init Mutex in User task", _task_get_id());
-
-	}
-
-	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
-		printf("\r\n[%d] Couldn't Access Mutex in User task", _task_get_id());
-	}
-
-	for (int i = 0; i < NUM_USER_TASK; i++) {
-		user_permissions[i].has_read_permissions = 0;
-		user_permissions[i].has_write_permissions = 0;
-		user_permissions[i].queue_id = 0;
-		user_permissions[i].task_id = _task_get_id();
-	}
-
-	_mutex_unlock(&permissions_mutex);
-	OSA_TimeDelay(100);
+	OpenR(USER_TASK_ID);
   
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
-	  printf("\r\nAm I here?");
     /* Write your code here ... */
 	_mutex_lock(&getline_mutex);
     if (getline_q.items_ready) {
@@ -236,7 +235,59 @@ void user_task(os_task_param_t task_init_data)
 	_mutex_unlock(&getline_mutex);
 
 
+    //OSA_TimeDelay(10);                 /* Example code (for task release) */
+    
+    
+#ifdef PEX_USE_RTOS   
+  }
+#endif    
+}
+
+/*
+** ===================================================================
+**     Callback    : UserInit_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+
+void UserInit_task(os_task_param_t task_init_data)
+{
+	return;
+  /* Write your local variable definition here */
+	/*
+	printf("\r\n[%d] Starting User Init Task", _task_get_id());
+
+	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Access Mutex in User task", _task_get_id());
+	}
+
+	for (int i = 0; i < NUM_USER_TASK; i++) {
+
+		user_permissions[i].has_read_permissions = FALSE;
+		user_permissions[i].has_write_permissions = FALSE;
+		user_permissions[i].queue_id = 0;
+		user_permissions[i].task_id = user_task_id;
+	}
+
+	if (_mutex_unlock(&permissions_mutex) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Unlock Mutex in User task", _task_get_id());
+	}
+	*/
+
+	_task_block();
+  
+#ifdef PEX_USE_RTOS
+  while (1) {
+#endif
+    /* Write your code here ... */
+    
+    
     OSA_TimeDelay(10);                 /* Example code (for task release) */
+   
+    
     
     
 #ifdef PEX_USE_RTOS   

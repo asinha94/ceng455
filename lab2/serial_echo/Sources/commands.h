@@ -28,8 +28,8 @@ extern MUTEX_STRUCT getline_mutex;
 extern USER_PERMISSIONS user_permissions[NUM_USER_TASK];
 extern MUTEX_STRUCT permissions_mutex;
 
-extern _queue_id openR(uint16_t);
-extern _queue_id openW(void);
+extern _queue_id OpenR(uint16_t);
+extern _queue_id OpenW(void);
 extern int _getline(char *);
 extern int _putline(_queue_id, char *);
 extern int Close(void);

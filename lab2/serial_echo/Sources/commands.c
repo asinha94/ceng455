@@ -12,15 +12,15 @@
 
 
 
-_queue_id openr(uint16_t queue_id) {
+_queue_id OpenR(uint16_t queue_id) {
 	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
-		printf("Couldn't Access Mutex in OpenR from: User Task %d", _task_get_id());
+		printf("\r\n[%d] Couldn't Access Mutex in OpenR: %x", _task_get_id(), _task_get_error());
 	}
 
 	int access_granted = TRUE;
 
 	for (int i = 0; i < NUM_USER_TASK; i++) {
-		if (user_permissions[i].task_id != _task_get_id()) {
+		if (user_permissions[i].task_id != queue_id) {
 			continue;
 		}
 
@@ -40,7 +40,7 @@ _queue_id openr(uint16_t queue_id) {
 int _getline(char *c) {
 
 	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
-		printf("Couldn't Access Mutex in OpenR from: User Task %d", _task_get_id());
+		printf("\r\n[%d] Couldn't Access Mutex in getline", _task_get_id());
 	}
 
 	for (int i = 0; i < NUM_USER_TASK; i++) {
@@ -63,10 +63,10 @@ int _getline(char *c) {
 	return FALSE;
 }
 
-_queue_id openW() {
+_queue_id OpenW() {
 
 	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
-		printf("Couldn't Access Mutex in OpenW from: User Task %d", _task_get_id());
+		printf("\r\n[%d] Couldn't Access Mutex in OpenW", _task_get_id());
 	}
 
 	int access_granted = 1;
@@ -91,7 +91,7 @@ _queue_id openW() {
 
 int _putline(_queue_id qid, char * string) {
 	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
-		printf("Couldn't Access Mutex in OpenR from: User Task %d", _task_get_id());
+		printf("\r\n[%d] Couldn't Access Mutex in putline", _task_get_id());
 	}
 
 	for (int i = 0; i < NUM_USER_TASK; i++) {
@@ -113,7 +113,7 @@ int _putline(_queue_id qid, char * string) {
 
 int Close(void) {
 	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
-		printf("Couldn't Access Mutex in OpenW from: User Task %d", _task_get_id());
+		printf("\r\n[%d] Couldn't Access Mutex in Close", _task_get_id());
 	}
 
 	int access_ungranted = TRUE;

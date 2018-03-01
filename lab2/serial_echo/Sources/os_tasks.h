@@ -42,6 +42,7 @@
 #include "SerialTask.h"
 #include "myUART.h"
 #include "UserTask.h"
+#include "Users.h"
 
 #include <message.h>
 
@@ -64,6 +65,8 @@ extern "C" {
 #define OPENW_RES_QUEUE_ID 11
 #define GETLINE_NEW_DATA_ID 12
 #define GETLINE_NEW_DATA_RECV_ID 13
+
+#define USER_TASK_ID 5000
 
 _pool_id RX_MESSAGE_POOL_ID;
 _pool_id TX_SYS_MESSAGE_POOL_ID;
@@ -118,6 +121,17 @@ void serial_task(os_task_param_t task_init_data);
 ** ===================================================================
 */
 void user_task(os_task_param_t task_init_data);
+
+/*
+** ===================================================================
+**     Callback    : UserInit_task
+**     Description : Task function entry.
+**     Parameters  :
+**       task_init_data - OS task parameter
+**     Returns : Nothing
+** ===================================================================
+*/
+void UserInit_task(os_task_param_t task_init_data);
 
 /* END os_tasks */
 
