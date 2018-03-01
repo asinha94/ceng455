@@ -37,11 +37,14 @@
 extern "C" {
 #endif 
 
-
-USER_TASK_READ readTasks[10];
-
-
 /* User includes (#include below this line is not maintained by Processor Expert) */
+
+GETLINE_QUEUE getline_q;
+MUTEX_STRUCT getline_mutex;
+
+USER_PERMISSIONS user_permissions[NUM_USER_TASK];
+MUTEX_STRUCT permissions_mutex;
+
 
 /*
 ** ===================================================================
@@ -55,9 +58,9 @@ USER_TASK_READ readTasks[10];
 
 void serial_task(os_task_param_t task_init_data)
 {
-
+	printf("\r\n[%d] Starting Serial Task", _task_get_id());
 	// Print Message to console
-	char output_message[13];
+	char output_message[10];
 	sprintf(output_message, "\n\rType: \n");
 	UART_DRV_SendDataBlocking(myUART_IDX, (uint8_t*)output_message, sizeof(output_message), 1000);
 
@@ -66,39 +69,29 @@ void serial_task(os_task_param_t task_init_data)
 	_queue_id rx_queue_id = _msgq_open(RX_QUEUE_ID, 0);
 
 	if (rx_queue_id == 0) {
-	 printf("\nCould not open the server message queue\n");
-	 _task_block();
+	 printf("\r\n[%d] Could not open the server message queue\n", _task_get_id());
+	 //_task_block();
 	}
 
+	_task_set_error(MQX_OK);
 	RX_MESSAGE_POOL_ID = _msgpool_create(sizeof(SERVER_MESSAGE), RX_QUEUE_SIZE, 0, 0);
 
 	if (RX_MESSAGE_POOL_ID == MSGPOOL_NULL_POOL_ID) {
-	 printf("\nCount not create a message pool\n");
-	 _task_block();
+	 printf("\r\n[%d] Count not create a message pool: %x\n", _task_get_id(), _task_get_error());
+	 //_task_block();
 	}
 
-
-
-
-
-	// GetLine Queue
-	/*
-	_queue_id getline_queue_id = _msgq_open(RX_QUEUE_ID, 0);
-
-	if (rx_queue_id == 0) {
-	 printf("\nCould not open the server message queue\n");
-	 _task_block();
+	MUTEX_ATTR_STRUCT mutextattr;
+	if (_mutatr_init(&mutextattr) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Init Mutex in Serial task", _task_get_id());
 	}
 
-	RX_MESSAGE_POOL_ID = _msgpool_create(sizeof(SERVER_MESSAGE), RX_QUEUE_SIZE, 0, 0);
+	if (_mutex_init(&getline_mutex, &mutextattr) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Init Mutex in Serial task", _task_get_id());
 
-	if (RX_MESSAGE_POOL_ID == MSGPOOL_NULL_POOL_ID) {
-	 printf("\nCount not create a message pool\n");
-	 _task_block();
 	}
-*/
 
-
+	getline_q.items_ready = FALSE;
 
 	int size = 1000;
 	char megaBuffer[size];
@@ -121,10 +114,16 @@ void serial_task(os_task_param_t task_init_data)
 	  _msg_free(msg_ptr);
 
 	  if (c == '\n' || c == '\r') {
-		  printf("\r\nHello");
-		  unsigned char to_send[100];
-		  memcpy(to_send, megaBuffer, current_position);
-		  printf("\r\nSending: %s", to_send);
+		  if (_mutex_lock(&getline_mutex) != MQX_EOK) {
+			  printf("\r\n[%d] Couldn't Access Mutex in Handler", _task_get_id());
+		  }
+
+		  memcpy(getline_q.data, megaBuffer, current_position);
+		  getline_q.data[current_position] = 0;
+		  getline_q.items_ready = TRUE;
+		  if (_mutex_unlock(&getline_mutex) != MQX_EOK) {
+			  printf("\r\n[%d] Couldn't Unlock Mutex in Handler", _task_get_id());
+		  }
 		  UART_DRV_SendData(myUART_IDX, "\r\n", sizeof("\r\n"));
 		  current_position = 0;
 		  continue;
@@ -191,70 +190,51 @@ void serial_task(os_task_param_t task_init_data)
 
 /*
 ** ===================================================================
-**     Callback    : readrequest_Task
+**     Callback    : user_task
 **     Description : Task function entry.
 **     Parameters  :
 **       task_init_data - OS task parameter
 **     Returns : Nothing
 ** ===================================================================
 */
-void readrequest_Task(os_task_param_t task_init_data)
+void user_task(os_task_param_t task_init_data)
 {
   /* Write your local variable definition here */
+	printf("\r\n[%d] Starting User Task", _task_get_id());
 
+	MUTEX_ATTR_STRUCT mutextattr;
+	_mutatr_init(&mutextattr);
 
-	// Init openR message queue
-	_queue_id user_read_queue = _msgq_open(OPENR_RES_QUEUE_ID, 0);
+	if (_mutex_init(&permissions_mutex, &mutextattr) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Init Mutex in User task", _task_get_id());
 
-	if (user_read_queue == 0) {
-	 printf("\nCould not open the read message queue\n");
-	 _task_block();
 	}
 
-	READ_MESSAGE_POOL_ID = _msgpool_create(sizeof(OPEN_REQUEST), RX_QUEUE_SIZE, 0, 0);
-
-	if (READ_MESSAGE_POOL_ID == MSGPOOL_NULL_POOL_ID) {
-	 printf("\nCount not create a read message pool\n");
-	 _task_block();
+	if (_mutex_lock(&permissions_mutex) != MQX_EOK) {
+		printf("\r\n[%d] Couldn't Access Mutex in User task", _task_get_id());
 	}
 
-	int count = 0;
+	for (int i = 0; i < NUM_USER_TASK; i++) {
+		user_permissions[i].has_read_permissions = 0;
+		user_permissions[i].has_write_permissions = 0;
+		user_permissions[i].queue_id = 0;
+		user_permissions[i].task_id = _task_get_id();
+	}
+
+	_mutex_unlock(&permissions_mutex);
+	OSA_TimeDelay(100);
   
 #ifdef PEX_USE_RTOS
   while (1) {
 #endif
-
+	  printf("\r\nAm I here?");
     /* Write your code here ... */
-    if (_msgq_get_count(user_read_queue) == 0) {
-    	continue;
+	_mutex_lock(&getline_mutex);
+    if (getline_q.items_ready) {
+    	printf("\r\n[%d] Read from User Task", getline_q.data);
     }
+	_mutex_unlock(&getline_mutex);
 
-
-    OPEN_REQUEST_PTR msg_ptr = _msgq_receive(user_read_queue, 0);
-    USER_TASK_READ user_task_read;
-    user_task_read.taskId = msg_ptr->task_id;
-    user_task_read.userQueueId = msg_ptr->queue_id;
-
-	msg_ptr->HEADER.TARGET_QID = msg_ptr->HEADER.SOURCE_QID;
-	msg_ptr->HEADER.SOURCE_QID = user_read_queue;
-
-    for (int i = 0; i < count; i++) {
-    	if (readTasks[i].taskId == user_task_read.taskId) {
-			msg_ptr->exists = TRUE;
-    	}
-    }
-
-	if (!msg_ptr->exists) {
-		readTasks[count] = user_task_read;
-		count++;
-	}
-
-    int result = _msgq_send(msg_ptr);
-
-	if (result != TRUE) {
-		printf("\nCould not send a message\n");
-		_task_block();
-	}
 
     OSA_TimeDelay(10);                 /* Example code (for task release) */
     

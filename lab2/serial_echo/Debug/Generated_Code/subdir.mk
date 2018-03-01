@@ -7,6 +7,7 @@ C_SRCS += \
 ../Generated_Code/Cpu.c \
 ../Generated_Code/MainTask.c \
 ../Generated_Code/SerialTask.c \
+../Generated_Code/UserTask.c \
 ../Generated_Code/clockMan1.c \
 ../Generated_Code/fsl_hwtimer1.c \
 ../Generated_Code/fsl_mpu1.c \
@@ -15,13 +16,13 @@ C_SRCS += \
 ../Generated_Code/myUART.c \
 ../Generated_Code/osa1.c \
 ../Generated_Code/pin_init.c \
-../Generated_Code/readRequestTask.c \
 ../Generated_Code/uart1.c 
 
 OBJS += \
 ./Generated_Code/Cpu.o \
 ./Generated_Code/MainTask.o \
 ./Generated_Code/SerialTask.o \
+./Generated_Code/UserTask.o \
 ./Generated_Code/clockMan1.o \
 ./Generated_Code/fsl_hwtimer1.o \
 ./Generated_Code/fsl_mpu1.o \
@@ -30,13 +31,13 @@ OBJS += \
 ./Generated_Code/myUART.o \
 ./Generated_Code/osa1.o \
 ./Generated_Code/pin_init.o \
-./Generated_Code/readRequestTask.o \
 ./Generated_Code/uart1.o 
 
 C_DEPS += \
 ./Generated_Code/Cpu.d \
 ./Generated_Code/MainTask.d \
 ./Generated_Code/SerialTask.d \
+./Generated_Code/UserTask.d \
 ./Generated_Code/clockMan1.d \
 ./Generated_Code/fsl_hwtimer1.d \
 ./Generated_Code/fsl_mpu1.d \
@@ -45,7 +46,6 @@ C_DEPS += \
 ./Generated_Code/myUART.d \
 ./Generated_Code/osa1.d \
 ./Generated_Code/pin_init.d \
-./Generated_Code/readRequestTask.d \
 ./Generated_Code/uart1.d 
 
 

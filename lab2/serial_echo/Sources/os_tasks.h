@@ -41,7 +41,7 @@
 #include "MainTask.h"
 #include "SerialTask.h"
 #include "myUART.h"
-#include "readRequestTask.h"
+#include "UserTask.h"
 
 #include <message.h>
 
@@ -51,7 +51,7 @@ extern "C" {
 
 
 /*Size*/
-#define RX_QUEUE_SIZE 10
+#define RX_QUEUE_SIZE 1
 
 /*ID*/
 #define RX_QUEUE_ID 5
@@ -62,18 +62,25 @@ extern "C" {
 #define OPENR_RES_QUEUE_ID 9
 #define OPENW_REQ_QUEUE_ID 10
 #define OPENW_RES_QUEUE_ID 11
-#define GETLINE_QUEUE_ID 12
+#define GETLINE_NEW_DATA_ID 12
+#define GETLINE_NEW_DATA_RECV_ID 13
 
 _pool_id RX_MESSAGE_POOL_ID;
 _pool_id TX_SYS_MESSAGE_POOL_ID;
 _pool_id READ_MESSAGE_POOL_ID;
 _pool_id OPENW_MESSAGE_POOL_ID;
+_pool_id GETLINE_NEW_DATA_POOL_ID;
 
 typedef struct server_message
 {
    MESSAGE_HEADER_STRUCT   HEADER;
    unsigned char DATA;
 } SERVER_MESSAGE, * SERVER_MESSAGE_PTR;
+
+typedef struct newline_msg {
+   MESSAGE_HEADER_STRUCT   HEADER;
+   unsigned char DATA[100];
+} NEWLINE_MSG, * NEWLINE_MSG_PTR;
 
 typedef struct open_request
 {
@@ -83,10 +90,11 @@ typedef struct open_request
    int exists;
 } OPEN_REQUEST, * OPEN_REQUEST_PTR;
 
-typedef struct userTaskRead{
-	_queue_id userQueueId;
-	_task_id taskId;
-} USER_TASK_READ;
+
+typedef struct get_queue_id{
+	MESSAGE_HEADER_STRUCT   HEADER;
+	uint32_t id;
+};
 
 /*
 ** ===================================================================
@@ -102,14 +110,14 @@ void serial_task(os_task_param_t task_init_data);
 
 /*
 ** ===================================================================
-**     Callback    : readrequest_Task
+**     Callback    : user_task
 **     Description : Task function entry.
 **     Parameters  :
 **       task_init_data - OS task parameter
 **     Returns : Nothing
 ** ===================================================================
 */
-void readrequest_Task(os_task_param_t task_init_data);
+void user_task(os_task_param_t task_init_data);
 
 /* END os_tasks */
 

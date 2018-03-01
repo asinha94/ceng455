@@ -115,6 +115,7 @@
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\Cpu.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\MainTask.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\SerialTask.c</PathName>
+      <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\UserTask.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\clockMan1.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\fsl_hwtimer1.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\fsl_mpu1.c</PathName>
@@ -123,7 +124,6 @@
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\myUART.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\osa1.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\pin_init.c</PathName>
-      <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\readRequestTask.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\uart1.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\SDK\platform\devices\MK64F12\startup\system_MK64F12.c</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\SDK\platform\devices\startup.c</PathName>
@@ -268,6 +268,7 @@
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\SDK\rtos\mqx\config\board\user_config.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\SDK\rtos\mqx\config\mcu\mqx_sdk_config.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\SerialTask.h</PathName>
+      <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\UserTask.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\board.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\clockMan1.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\fsl_hwtimer1.h</PathName>
@@ -276,7 +277,6 @@
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\myUART.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\osa1.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\pin_init.h</PathName>
-      <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\readRequestTask.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\Generated_Code\uart1.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\SDK\platform\CMSIS\Include\arm_common_tables.h</PathName>
       <PathName>C:\Users\asinha\Downloads\ceng455\lab2\serial_echo\SDK\platform\CMSIS\Include\arm_const_structs.h</PathName>

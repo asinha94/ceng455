@@ -1,0 +1,27 @@
+#ifndef __commands_H_
+#define __commands_H_
+
+#include "Cpu.h"
+#include "Events.h"
+#include "rtos_main_task.h"
+#include <message.h>
+
+#define NUM_USER_TASK 1
+
+typedef struct user_permissions{
+	_queue_id queue_id;
+	_task_id task_id;
+	int has_write_permissions;
+	int has_read_permissions;
+} USER_PERMISSIONS;
+
+USER_PERMISSIONS user_permissions[NUM_USER_TASK];
+MUTEX_STRUCT permissions_mutex;
+
+_queue_id openR(uint16_t);
+_queue_id openW(void);
+int _getline(char *);
+int _putline(_queue_id, char *);
+int Close(void);
+
+#endif

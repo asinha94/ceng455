@@ -7,7 +7,7 @@
 **     Version     : Component 1.2.0, Driver 01.00, CPU db: 3.00.000
 **     Repository  : KSDK 1.3.0
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2018-02-28, 19:20, # CodeGen: 5
+**     Date/Time   : 2018-03-01, 12:35, # CodeGen: 9
 **
 **     Copyright : 1997 - 2015 Freescale Semiconductor, Inc. 
 **     All Rights Reserved.
@@ -59,7 +59,7 @@
 #include "os_tasks.h"
 #include "MainTask.h"
 #include "SerialTask.h"
-#include "readRequestTask.h"
+#include "UserTask.h"
 extern void * kernel_data_prv;
 #if MQXCFG_PREALLOCATED_SYSTEM_STACKS
 extern uint8_t mqx_interrupt_stack[];
@@ -94,13 +94,13 @@ const TASK_TEMPLATE_STRUCT MQX_template_list[] =
     /* Task parameter                 */  (uint32_t)(NULL),
     /* Task time slice                */  (uint32_t)(0U)
   },       
-  /* Task: readRequestTask */
+  /* Task: UserTask */
   {
-    /* Task number                    */  READREQUESTTASK_TASK,
-    /* Entry point                    */  (TASK_FPTR)readrequest_Task,
-    /* Stack size                     */  READREQUESTTASK_TASK_STACK_SIZE,
-    /* Task priority                  */  (PRIORITY_OSA_TO_RTOS(READREQUESTTASK_TASK_PRIORITY)),
-    /* Task name                      */  READREQUESTTASK_TASK_NAME,
+    /* Task number                    */  USERTASK_TASK,
+    /* Entry point                    */  (TASK_FPTR)user_task,
+    /* Stack size                     */  USERTASK_TASK_STACK_SIZE,
+    /* Task priority                  */  (PRIORITY_OSA_TO_RTOS(USERTASK_TASK_PRIORITY)),
+    /* Task name                      */  USERTASK_TASK_NAME,
     /* Task attributes                */  (0),
     /* Task parameter                 */  (uint32_t)(NULL),
     /* Task time slice                */  (uint32_t)(0U)
