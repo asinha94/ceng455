@@ -1,4 +1,0 @@
-
-_queue_id openR(uint16_t);
-
-int getline(char *);

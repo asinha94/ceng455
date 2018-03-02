@@ -1,7 +1,0 @@
-#ifndef __commands_H_
-#define __commands_H_
-_queue_id openR(uint16_t);
-_queue_id openW(void);
-int _getline(char *);
-
-#endif

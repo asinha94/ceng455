@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;serial_echo/Sources/commands&apos; to &apos;commands.h&apos;" description="Rename resource &apos;commands&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Sources/commands" name="commands.h" stamp="1519871635649" updateReferences="true"/>
-</session>

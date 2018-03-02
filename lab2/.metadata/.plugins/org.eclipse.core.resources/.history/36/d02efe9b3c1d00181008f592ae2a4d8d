@@ -1,5 +1,0 @@
-
-_queue_id openR(uint16_t);
-_queue_id openW(uint16_t);
-
-int _getline(char *);
